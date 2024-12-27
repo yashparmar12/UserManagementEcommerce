@@ -64,7 +64,8 @@ const Products = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/user/addProducts",
+        "https://usermanagementecommerce-1.onrender.com/api/user/addProducts",
+        // "http://localhost:8000/api/user/addProducts",
         {
           method: "POST",
           body: formData,
@@ -108,7 +109,8 @@ const Products = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:8000/api/user/userData", {
+      const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/userData", {
+      // const response = await fetch("http://localhost:8000/api/user/userData", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -151,7 +153,8 @@ const Products = () => {
   const searchData = async (value) => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/user/searchProduct",
+        "https://usermanagementecommerce-1.onrender.com/api/user/searchProduct",
+        // "http://localhost:8000/api/user/searchProduct",
         {
           method: "POST",
           body: JSON.stringify({ searchInput: value }),

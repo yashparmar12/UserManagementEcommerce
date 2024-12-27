@@ -36,8 +36,8 @@ const UserName = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:8000/api/user/userData", {
-        // const response = await fetch("https://usertasks-mj4d.onrender.com/api/user/userData", {
+      const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/userData", {
+      // const response = await fetch("http://localhost:8000/api/user/userData", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -96,8 +96,8 @@ const UserName = () => {
       // if (window.confirm("Are you sure want to delete") === true) {
 
       const token = localStorage.getItem("token");
-      await fetch("http://localhost:8000/api/user/delete", {
-        // await fetch("https://usertasks-mj4d.onrender.com/api/user/delete", {
+      await fetch("https://usermanagementecommerce-1.onrender.com/api/user/delete", {
+      // await fetch("http://localhost:8000/api/user/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -171,8 +171,8 @@ const UserName = () => {
   const searchData = async (value) => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/user/searchData",
-        // const response = await fetch("https://usertasks-mj4d.onrender.com/api/user/searchData",
+        "https://usermanagementecommerce-1.onrender.com/api/user/searchData",
+        // "http://localhost:8000/api/user/searchData",
         {
           method: "POST",
           body: JSON.stringify({ searchInput: value }),
@@ -213,10 +213,12 @@ const UserName = () => {
     try {
       const url =
         formate === "pdf"
-          ? "http://localhost:8000/api/user/pdfDownload"
+          ? "https://usermanagementecommerce-1.onrender.com/api/user/pdfDownload"
+          // ? "http://localhost:8000/api/user/pdfDownload"
           : // ? "https://usertasks-mj4d.onrender.com/api/user/pdfDownload"
           formate === "csv"
-          ? "http://localhost:8000/api/user/csvDownload"
+          ? "https://usermanagementecommerce-1.onrender.com/api/user/csvDownload"
+          // ? "http://localhost:8000/api/user/csvDownload"
           : // ? "https://usertasks-mj4d.onrender.com/api/user/csvDownload"
           formate === "zip"
           ? "http://localhost:8000/api/user/zipDownload"
@@ -298,7 +300,8 @@ const UserName = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:8000/api/user/Pagination?page=${currentPage + 1}`,
+          `https://usermanagementecommerce-1.onrender.com/api/user/Pagination?page=${currentPage + 1}`,
+          // `http://localhost:8000/api/user/Pagination?page=${currentPage + 1}`,
           {
             method: "GET",
             headers: {
@@ -329,7 +332,8 @@ const UserName = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:8000/api/user/Pagination?page=${currentPage - 1}`,
+          `https://usermanagementecommerce-1.onrender.com/api/user/Pagination?page=${currentPage - 1}`,
+          // `http://localhost:8000/api/user/Pagination?page=${currentPage - 1}`,
           {
             method: "GET",
             headers: {

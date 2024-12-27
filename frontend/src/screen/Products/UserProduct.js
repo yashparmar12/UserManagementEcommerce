@@ -54,7 +54,8 @@ const UserProduct = ({ userProduct }) => {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:8000/api/user/addToCart/${_id}`,
+        `https://usermanagementecommerce-1.onrender.com/api/user/addToCart/${_id}`,
+        // `http://localhost:8000/api/user/addToCart/${_id}`,
         {
           method: "POST",
           headers: {

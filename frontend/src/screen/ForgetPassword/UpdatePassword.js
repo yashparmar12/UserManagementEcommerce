@@ -56,7 +56,8 @@ const Login = () => {
             return;
         }
 
-        const response = await fetch("http://localhost:8000/api/user/updatePassword", {
+        const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/updatePassword", {
+        // const response = await fetch("http://localhost:8000/api/user/updatePassword", {
         // const response = await fetch("https://usertasks-mj4d.onrender.com/api/user/updatePassword", {
             method: "POST",
             headers: {

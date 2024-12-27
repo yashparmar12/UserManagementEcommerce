@@ -25,8 +25,8 @@ app.use(cookieParser());
 app.use(
   cors({
     // origin: "https://usertasks-g5ai.onrender.com", // Allow frontend to access backend
-    // origin: "https://usertasks-mj4d.onrender.com" || "http://localhost:3000", // Allow frontend to access backend
-    origin:"http://localhost:3000", // Allow frontend to access backend
+    origin: "https://usermanagementecommerce-1.onrender.com" || "http://localhost:3000", // Allow frontend to access backend
+    // origin:"http://localhost:3000", // Allow frontend to access backend
     credentials: true, // Allow cookies to be sent
   })
 );
