@@ -8,7 +8,7 @@ import path from "path";
 import db from "./db.js";
 
 const app = express();
-const PORT = 4000 || 8000;
+const PORT = 5000 || 8000;
 // const PORT = 8000;
 
 
