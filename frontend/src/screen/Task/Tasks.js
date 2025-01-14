@@ -28,8 +28,8 @@ const Tasks = (props) => {
         e.preventDefault();
 
         try {
-            const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/task", {
-            // const response = await fetch("http://localhost:8000/api/user/task", {
+            // const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/task", {
+            const response = await fetch("http://localhost:8000/api/user/task", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -58,6 +58,7 @@ const Tasks = (props) => {
         setAddTask(true);
         settaskOpen(false);
     };
+    
 
     useEffect(() => {
         if (props.userIds) {
@@ -141,9 +142,16 @@ const Tasks = (props) => {
                         aria-orientation="vertical"
                         aria-labelledby="options-menu"
                     >
-                        <button
+                        
+                       <button
                             onClick={() => addTaskModalShow()}
-                            className="!bg-gray-100 !text-gray-700 hover:!bg-blue-500 hover:!text-white flex items-center w-full px-8 py-2 text-sm rounded-t-md focus:outline-none transition duration-150 ease-in-out"
+                            disabled={ids.length === 0}
+                            className={`!bg-gray-100 !text-gray-700 hover:!bg-blue-500 hover:!text-white flex items-center w-full px-8 py-2 
+                            text-sm rounded-t-md focus:outline-none transition duration-150 ease-in-out ${
+                                ids.length === 0
+                                  ? "bg-blue-200 cursor-not-allowed"
+                                  : "bg-blue-600 hover:bg-blue-700"
+                              }`}
                             role="menuitem"
                         >
                             <ClipboardPenLine className="h-4 mr-1"/>

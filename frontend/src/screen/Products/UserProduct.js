@@ -8,9 +8,10 @@ import {
   Battery,
 } from "lucide-react";
 
-const UserProduct = ({ userProduct }) => {
+const UserProduct = ({ userProduct ,checkBoxState}) => {
   const {
     _id,
+    category,
     brandName,
     modelName,
     image,
@@ -22,13 +23,16 @@ const UserProduct = ({ userProduct }) => {
     simType,
     displaySize,
     price,
+    connectivity,
+    processor,
+    windows,
+    warranty,
     quantity,
   } = userProduct;
 
   const [Quantity, setQuantity] = useState(1);
   const [openProduct, setOpenProduct] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
-  
 
   const originalPrice = price + 5000;
 
@@ -54,8 +58,8 @@ const UserProduct = ({ userProduct }) => {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `https://usermanagementecommerce-1.onrender.com/api/user/addToCart/${_id}`,
-        // `http://localhost:8000/api/user/addToCart/${_id}`,
+        // `https://usermanagementecommerce-1.onrender.com/api/user/addToCart/${_id}`,
+        `http://localhost:8000/api/user/addToCart/${_id}`,
         {
           method: "POST",
           headers: {
@@ -79,6 +83,7 @@ const UserProduct = ({ userProduct }) => {
       console.log(error);
     }
   };
+
 
   return (
     <div className="flex flex-wrap" style={{ marginLeft: "10%" }}>
@@ -217,111 +222,208 @@ const UserProduct = ({ userProduct }) => {
           </div>
         </div>
       )}
+      
+      {checkBoxState === "mobile" ? (
+        <div
+          className="bg-gray-80 flex flex-col overflow-hidden cursor-pointer hover:shadow-md  transition-all mt-14"
+          style={{ width: "250px" }}
+        >
+          <div className="w-full">
+            <img
+              src={image}
+              alt="Mobile"
+              onClick={() => handleOpenModal(userProduct)}
+              className="w-full object-cover object-top aspect-[230/307]"
+              style={{ height: "200px" }}
+            />
+          </div>
+          <div className="p-2 flex-1 flex flex-col">
+            <div className="flex-1">
+              <h5 className="text-sm sm:text-base font-bold text-gray-800 truncate">
+                {modelName}
+              </h5>
 
-      <div
-        className="bg-gray-80 flex flex-col overflow-hidden cursor-pointer hover:shadow-md  transition-all mt-14"
-        style={{ width: "250px" }}
-      >
-        <div className="w-full">
-          <img
-            src={image}
-            alt="Mobile"
-            onClick={() => handleOpenModal(userProduct)}
-            className="w-full object-cover object-top aspect-[230/307]"
-            style={{ height: "200px" }}
-          />
-        </div>
-        <div className="p-2 flex-1 flex flex-col">
-          <div className="flex-1">
-            <h5 className="text-sm sm:text-base font-bold text-gray-800 truncate">
-              {modelName}
-            </h5>
-
-            <div className="flex flex-wrap justify-between gap-2 mt-2">
-              <div className="flex gap-2">
-                <h6 className="text-sm sm:text-base font-bold text-gray-800">
-                  ₹{price}
-                </h6>
-                <h6 className="text-sm sm:text-base text-gray-500">
-                  <strike>₹{originalPrice}</strike>
-                </h6>
+              <div className="flex flex-wrap justify-between gap-2 mt-2">
+                <div className="flex gap-2">
+                  <h6 className="text-sm sm:text-base font-bold text-gray-800">
+                    ₹{price}
+                  </h6>
+                  <h6 className="text-sm sm:text-base text-gray-500">
+                    <strike>₹{originalPrice}</strike>
+                  </h6>
+                </div>
               </div>
-            </div>
-            <div className="mt-2 flex flex-col gap-1">
-              <div className="flex items-center gap-1">
-                <Ram className="w-4 h-4 text-gray-500" />
-                <span className="text-sm text-gray-600">{ram} GB RAM</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <HardDrive className="w-4 h-4 text-gray-500" />
-                <span className="text-sm text-gray-600">
-                  {memory} GB Storage
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Battery className="w-4 h-4 text-gray-500" />
-                <span className="text-sm text-gray-600">
-                  {battery} mAh Battery
-                </span>
-              </div>
-              <div
-                className="flex items-center gap-1 bg-gray-100"
-                style={{ width: "80px", borderRadius: "8px solid gray" }}
-              >
-                <button
-                  type="button"
-                  class="mt-1 flex items-center px-3 py-1.5 border border-gray-300 text-gray-800 text-xs outline-none bg-transparent rounded-md pb-2"
+              <div className="mt-2 flex flex-col gap-1">
+                <div className="flex items-center gap-1">
+                  <Ram className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm text-gray-600">{ram} GB RAM</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <HardDrive className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm text-gray-600">
+                    {memory} GB Storage
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Battery className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm text-gray-600">
+                    {battery} mAh Battery
+                  </span>
+                </div>
+                <div
+                  className="flex items-center gap-1 bg-gray-100"
+                  style={{ width: "80px", borderRadius: "8px solid gray" }}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-3 fill-current p-auto"
-                    viewBox="0 0 124 124"
-                    onClick={handleDecreaseQuantity}
+                  <button
+                    type="button"
+                    class="mt-1 flex items-center px-3 py-1.5 border border-gray-300 text-gray-800 text-xs outline-none bg-transparent rounded-md pb-2"
                   >
-                    <path
-                      d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
-                      data-original="#000000"
-                      
-                    ></path>
-                  </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-3 fill-current p-auto"
+                      viewBox="0 0 124 124"
+                      onClick={handleDecreaseQuantity}
+                    >
+                      <path
+                        d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
+                        data-original="#000000"
+                      ></path>
+                    </svg>
 
-                  <span class="mx-3 font-bold">{Quantity}</span>
+                    <span class="mx-3 font-bold">{Quantity}</span>
 
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-3 fill-current"
-                    viewBox="0 0 42 42"
-                    onClick={handleIncreaseQuantity}
-                  >
-                    <path
-                      d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
-                      data-original="#000000"
-                      
-                    ></path>
-                  </svg>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-3 fill-current"
+                      viewBox="0 0 42 42"
+                      onClick={handleIncreaseQuantity}
+                    >
+                      <path
+                        d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
+                        data-original="#000000"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex items-center gap-2 mt-0">
-            {/* <div
-              className="bg-pink-100 hover:bg-pink-200 w-12 h-9 flex items-center justify-center rounded cursor-pointer"
-              title="Wishlist"
-            >
-              <Heart className="w-4 h-4 text-pink-600" />
-            </div> */}
-            <button
-              onClick={() => {
-                handleAddToCart(_id);
-              }}
-              type="button"
-              className="text-sm px-2 min-h-[36px] w-full bg-blue-600 hover:bg-blue-700 text-white tracking-wide ml-auto outline-none border-none rounded"
-            >
-              Add to cart
-            </button>
+            <div className="flex items-center gap-2 mt-0">
+              <button
+                onClick={() => {
+                  handleAddToCart(_id);
+                }}
+                type="button"
+                className="text-sm px-2 min-h-[36px] w-full bg-blue-600 hover:bg-blue-700 text-white tracking-wide ml-auto outline-none border-none rounded"
+              >
+                Add to cart
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      ) : checkBoxState === "laptop" ? (
+        <div
+          className="bg-gray-80 flex flex-col overflow-hidden cursor-pointer hover:shadow-md  transition-all mt-10"
+          style={{ width: "250px" }}
+        >
+          <div className="w-full">
+            <img
+              src={image}
+              alt="Mobile"
+              onClick={() => handleOpenModal(userProduct)}
+              className="w-full object-cover object-top aspect-[230/307]"
+              style={{ height: "200px" }}
+            />
+          </div>
+          <div className="p-2 flex-1 flex flex-col">
+            <div className="flex-1">
+              <h5 className="text-sm sm:text-base font-bold text-gray-800 truncate">
+                {modelName}
+              </h5>
+
+              <div className="flex flex-wrap justify-between gap-2 mt-2">
+                <div className="flex gap-2">
+                  <h6 className="text-sm sm:text-base font-bold text-gray-800">
+                    ₹{price}
+                  </h6>
+                  <h6 className="text-sm sm:text-base text-gray-500">
+                    <strike>₹{originalPrice}</strike>
+                  </h6>
+                </div>
+              </div>
+              <div className="mt-2 flex flex-col gap-1">
+                <div className="flex items-center gap-1">
+                  {/* <Ram className="w-4 h-4 text-gray-500" /> */}
+                  <span className="w-4 h-4 text-gray-500">Processor</span>
+                  <span className="text-sm text-gray-800 mt-2 ml-14">
+                    {processor} 
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-4 h-4 text-gray-500">Windows</span>
+                  <span className="text-sm text-gray-800 mt-2 ml-14">{windows}</span>
+                </div>
+                
+                <div className="flex items-center gap-1">
+                  {/* <Battery className="w-4 h-4 text-gray-500" /> */}
+                  <span className="w-4 h-4 text-gray-500">Battery</span> 
+                  <span className="text-sm text-gray-800 mt-2 ml-14">{battery}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  {/* <HardDrive className="w-4 h-4 text-gray-500" /> */}
+                  <span className="w-4 h-4 text-gray-500">Warranty</span>
+                  <span className="text-sm text-gray-800 mt-2 ml-14">{warranty}</span>
+                </div>
+                <div
+                  className="flex items-center gap-1 bg-gray-100"
+                  style={{ width: "80px", borderRadius: "8px solid gray" }}
+                >
+                  <button
+                    type="button"
+                    class="mt-1 flex items-center px-3 py-1.5 border border-gray-300 text-gray-800 text-xs outline-none bg-transparent rounded-md pb-2"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-3 fill-current p-auto"
+                      viewBox="0 0 124 124"
+                      onClick={handleDecreaseQuantity}
+                    >
+                      <path
+                        d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
+                        data-original="#000000"
+                      ></path>
+                    </svg>
+
+                    <span class="mx-3 font-bold">{Quantity}</span>
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-3 fill-current"
+                      viewBox="0 0 42 42"
+                      onClick={handleIncreaseQuantity}
+                    >
+                      <path
+                        d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
+                        data-original="#000000"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 mt-0">
+              <button
+                onClick={() => {
+                  handleAddToCart(_id);
+                }}
+                type="button"
+                className="text-sm px-2 min-h-[36px] w-full bg-blue-600 hover:bg-blue-700 text-white tracking-wide ml-auto outline-none border-none rounded"
+              >
+                Add to cart
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

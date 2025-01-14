@@ -1,216 +1,210 @@
-// import React, { useEffect, useState, useRef } from "react";
-// import { Flex, Spin } from "antd";
-// import UserProduct from "./UserProduct";
-// import { Search } from "lucide-react";
-import { Link } from "react-router-dom";
-import Mobile from "./Mobile";
+import React, { useEffect, useState, useRef } from "react";
+import { Flex, Spin } from "antd";
+import UserProduct from "./UserProduct";
+import { Search } from "lucide-react";
 
-const Products = () => {
-  // const [userinfo, setUserInfo] = useState([]);
-  // const [userProducts, setUserProducts] = useState([]);
-  // const [loading, setLoading] = useState(false);
-  // const [search, setSearch] = useState("");
-  // const timerRef = useRef(null);
-  // const [showAlert, setShowAlert] = useState(false);
+
+const HeadPhone = () => {
+  const [userinfo, setUserInfo] = useState([]);
+  const [userProducts, setUserProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const timerRef = useRef(null);
+  const [showAlert, setShowAlert] = useState(false);
 
   
 
-  // const [phone, setPhone] = useState({
-  //   brandName: "",
-  //   modelName: "",
-  //   image: "",
-  //   ram: "",
-  //   memory: "",
-  //   battery: "",
-  //   frontCamera: "",
-  //   backCamera: "",
-  //   simType: "",
-  //   displaySize: "",
-  //   price: 0,
-  //   productQuantity: 0,
-  // });
+  const [phone, setPhone] = useState({
+    brandName: "",
+    modelName: "",
+    image: "",
+    connectivity: "",
+    deepBass: "",
+    battery: "",
+    playTime: "",
+    bluetoothRange: "",
+    warranty: "",
+    price: 0,
+    productQuantity: 0,
+  });
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setPhone((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
-  // const handleFileChange = (e) => {
-  //   setPhone((prev) => ({
-  //     ...prev,
-  //     image: e.target.files[0],
-  //   }));
-  // };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setPhone((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleFileChange = (e) => {
+    setPhone((prev) => ({
+      ...prev,
+      image: e.target.files[0],
+    }));
+  };
 
-  // const handleSubmit = async (e) => {
-  //   setLoading(true);
-  //   e.preventDefault();
+  const handleSubmit = async (e) => {
+    setLoading(true);
+    e.preventDefault();
 
-  //   const formData = new FormData();
-  //   formData.append("brandName", phone.brandName);
-  //   formData.append("modelName", phone.modelName);
-  //   formData.append("ram", phone.ram);
-  //   formData.append("memory", phone.memory);
-  //   formData.append("battery", phone.battery);
-  //   formData.append("frontCamera", phone.frontCamera);
-  //   formData.append("backCamera", phone.backCamera);
-  //   formData.append("simType", phone.simType);
-  //   formData.append("displaySize", phone.displaySize);
-  //   formData.append("price", phone.price);
-  //   formData.append("productQuantity", phone.productQuantity);
-  //   if (phone.image) {
-  //     formData.append("image", phone.image);
-  //   }
+    const formData = new FormData();
+    formData.append("brandName", phone.brandName);
+    formData.append("modelName", phone.modelName);
+    formData.append("connectivity", phone.connectivity);
+    formData.append("deepBass", phone.deepBass);
+    formData.append("battery", phone.battery);
+    formData.append("playTime", phone.playTime);
+    formData.append("bluetoothRange", phone.bluetoothRange);
+    formData.append("warranty", phone.warranty);
+    formData.append("price", phone.price);
+    formData.append("productQuantity", phone.productQuantity);
+    if (phone.image) {
+      formData.append("image", phone.image);
+    }
 
-  //   try {
-  //     const response = await fetch(
-  //       // "https://usermanagementecommerce-1.onrender.com/api/user/addProducts",
-  //       "http://localhost:8000/api/user/addProducts",
-  //       {
-  //         method: "POST",
-  //         body: formData,
-  //       }
-  //     );
+    try {
+      const response = await fetch(
+        // "https://usermanagementecommerce-1.onrender.com/api/user/addProducts",
+        "http://localhost:8000/api/user/addMobileProduct",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
-  //     const responseData = await response.json();
+      const responseData = await response.json();
 
-  //     if (responseData?.success) {
-  //       console.log(responseData.userData);
-  //       setShowAlert(true);
-  //       setTimeout(() => {
-  //         setShowAlert(false);
-  //       }, 3000);
-  //     } else {
-  //       console.log("Unable to fetch user data");
-  //     }
-  //     setPhone({
-  //       brandName: "",
-  //       modelName: "",
-  //       image: "",
-  //       ram: "",
-  //       memory: "",
-  //       battery: "",
-  //       frontCamera: "",
-  //       backCamera: "",
-  //       simType: "",
-  //       displaySize: "",
-  //       price: 0,
-  //       productQuantity: 0,
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      if (responseData?.success) {
+        console.log(responseData.userData);
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 3000);
+      } else {
+        console.log("Unable to fetch user data");
+      }
+      setPhone({
+        brandName: "",
+        modelName: "",
+        image: "",
+        connectivity: "",
+        deepBass: "",
+        battery: "",
+        playTime: "",
+        bluetoothRange: "",
+        warranty: "",
+        price: 0,
+        productQuantity: 0,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // const access = async (e) => {
-  //   setLoading(true);
-  //   try {
-  //     const token = localStorage.getItem("token");
+  const access = async (e) => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
 
-  //     // const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/userData", {
-  //     const response = await fetch("http://localhost:8000/api/user/userData", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       credentials: "include",
-  //     });
+      // const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/userData", {
+      const response = await fetch("http://localhost:8000/api/user/userData", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      });
 
-  //     const responseData = await response.json();
+      const responseData = await response.json();
 
-  //     if (responseData.success) {
-  //       const userLen = responseData.userLen;
+      if (responseData.success) {
+        const userLen = responseData.userLen;
 
-  //       if (Array.isArray(userLen) && responseData?.userLen) {
-  //         const admin = responseData?.userLen.find(
-  //           (res) => res.role === "admin"
-  //         );
+        if (Array.isArray(userLen) && responseData?.userLen) {
+          const admin = responseData?.userLen.find(
+            (res) => res.role === "admin"
+          );
 
-  //         if (admin) {
-  //           setUserInfo(admin);
-  //         } else {
-  //           console.log("Not any admin");
-  //         }
-  //       } else {
-  //         // console.log(responseData.userProducts);
-  //         // console.log(responseData.user);
-  //         setUserInfo(responseData.user);
-  //         setUserProducts(responseData.userProducts);
-  //       }
-  //     } else {
-  //       console.log("Unable to fetch user data");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+          if (admin) {
+            setUserInfo(admin);
+          } else {
+            console.log("Not any admin");
+          }
+        } else {
+          // console.log(responseData.userProducts);
+          // console.log(responseData.user);
+          setUserInfo(responseData.user);
+          setUserProducts(responseData.userProducts);
+        }
+      } else {
+        console.log("Unable to fetch user data");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // const searchData = async (value) => {
-  //   try {
-  //     const response = await fetch(
-  //       // "https://usermanagementecommerce-1.onrender.com/api/user/searchProduct",
-  //       "http://localhost:8000/api/user/searchProduct",
-  //       {
-  //         method: "POST",
-  //         body: JSON.stringify({ searchInput: value }),
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
+  const searchData = async (value) => {
+    try {
+      const response = await fetch(
+        // "https://usermanagementecommerce-1.onrender.com/api/user/searchProduct",
+        "http://localhost:8000/api/user/searchProduct",
+        {
+          method: "POST",
+          body: JSON.stringify({ searchInput: value }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  //     const responseData = await response.json();
+      const responseData = await response.json();
 
-  //     if (responseData?.userProduct) {
-  //       if (!responseData.userProduct) {
-  //         console.log(responseData.userProduct);
-  //       } else {
-  //         setUserProducts(responseData.userProduct);
-  //         console.log(responseData.userProduct);
-  //       }
-  //     } else {
-  //       console.log("Unable to fetch user data");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+      if (responseData?.userProduct) {
+        if (!responseData.userProduct) {
+          console.log(responseData.userProduct);
+        } else {
+          setUserProducts(responseData.userProduct);
+          console.log(responseData.userProduct);
+        }
+      } else {
+        console.log("Unable to fetch user data");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // const handleChangeSearch = (e) => {
-  //   const value = e.target.value;
-  //   setSearch(value);
+  const handleChangeSearch = (e) => {
+    const value = e.target.value;
+    setSearch(value);
 
-  //   if (value) {
-  //     if (timerRef.current) {
-  //       clearTimeout(timerRef.current);
-  //     }
+    if (value) {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
 
-  //     timerRef.current = setTimeout(() => {
-  //       searchData(value);
-  //     }, 500);
-  //   } else {
-  //     setTimeout(() => {
-  //       access();
-  //     }, 500);
-  //   }
-  // };
+      timerRef.current = setTimeout(() => {
+        searchData(value);
+      }, 500);
+    } else {
+      setTimeout(() => {
+        access();
+      }, 500);
+    }
+  };
 
-  // useEffect(() => {
-  //   access();
-  // }, []);
+  useEffect(() => {
+    access();
+  }, []);
 
   return (
     <div>
-      <Link to={"/Products/mobile"} size={20}>Mobile</Link>
-      <Link to={"/Products/laptop"} size={20}>Head Phone</Link>
-      {/* {showAlert && (
+      {showAlert && (
         <div
           className="bg-green-500 text-white font-semibold tracking-wide flex items-center w-max max-w-sm p-4 rounded-md shadow-md shadow-blue-200"
           style={{
@@ -330,28 +324,28 @@ const Products = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="ram" className="text-sm font-medium mb-1">
-                  RAM
+                <label htmlFor="connectivity" className="text-sm font-medium mb-1">
+                Connectivity
                 </label>
                 <input
                   type="text"
-                  id="ram"
-                  name="ram"
-                  value={phone.ram}
+                  id="connectivity"
+                  name="connectivity"
+                  value={phone.connectivity}
                   onChange={handleChange}
                   className="mt-1 p-2 border rounded-md"
                   required
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="memory" className="text-sm font-medium mb-1">
-                  Memory
+                <label htmlFor="deepBass" className="text-sm font-medium mb-1">
+                Deep Bass
                 </label>
                 <input
                   type="text"
-                  id="memory"
-                  name="memory"
-                  value={phone.memory}
+                  id="deepBass"
+                  name="deepBass"
+                  value={phone.deepBass}
                   onChange={handleChange}
                   className="mt-1 p-2 border rounded-md"
                   required
@@ -373,16 +367,16 @@ const Products = () => {
               </div>
               <div className="flex flex-col">
                 <label
-                  htmlFor="frontCamera"
+                  htmlFor="playTime"
                   className="text-sm font-medium mb-1"
                 >
-                  Front Camera
+                  Play Time
                 </label>
                 <input
                   type="text"
-                  id="frontCamera"
-                  name="frontCamera"
-                  value={phone.frontCamera}
+                  id="playTime"
+                  name="playTime"
+                  value={phone.playTime}
                   onChange={handleChange}
                   className="mt-1 p-2 border rounded-md"
                   required
@@ -390,52 +384,36 @@ const Products = () => {
               </div>
               <div className="flex flex-col">
                 <label
-                  htmlFor="backCamera"
+                  htmlFor="bluetoothRange"
                   className="text-sm font-medium mb-1"
                 >
-                  Back Camera
+                  Bluetooth Range
                 </label>
                 <input
                   type="text"
-                  id="backCamera"
-                  name="backCamera"
-                  value={phone.backCamera}
+                  id="bluetoothRange"
+                  name="bluetoothRange"
+                  value={phone.bluetoothRange}
                   onChange={handleChange}
                   className="mt-1 p-2 border rounded-md"
                   required
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="simType" className="text-sm font-medium mb-1">
-                  SIM Type
+                <label htmlFor="warranty" className="text-sm font-medium mb-1">
+                Warranty
                 </label>
                 <input
                   type="text"
-                  id="simType"
-                  name="simType"
-                  value={phone.simType}
+                  id="warranty"
+                  name="warranty"
+                  value={phone.warranty}
                   onChange={handleChange}
                   className="mt-1 p-2 border rounded-md"
                   required
                 />
               </div>
-              <div className="flex flex-col">
-                <label
-                  htmlFor="displaySize"
-                  className="text-sm font-medium mb-1"
-                >
-                  Display Size
-                </label>
-                <input
-                  type="text"
-                  id="displaySize"
-                  name="displaySize"
-                  value={phone.displaySize}
-                  onChange={handleChange}
-                  className="mt-1 p-2 border rounded-md"
-                  required
-                />
-              </div>
+              
               <div className="flex flex-col">
                 <label htmlFor="price" className="text-sm font-medium mb-1">
                   Price
@@ -469,7 +447,7 @@ const Products = () => {
               type="submit"
               className="mt-6 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
             >
-              Add Phone
+              Add Head Phone
             </button>
           </form>
         </div>
@@ -517,9 +495,11 @@ const Products = () => {
           </div>
           
         </div>
-      )} */}
+      )}
     </div>
   );
 };
 
-export default Products;
+export default HeadPhone;
+
+

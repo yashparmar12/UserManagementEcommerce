@@ -35,6 +35,7 @@ const userAdmin = new mongoose.Schema({
         type: String,
         required: false
     },
+   
     content: [
         {
             taskName: {
@@ -54,6 +55,12 @@ const userAdmin = new mongoose.Schema({
             }
         }
     ],
+    
+    unreadCount: {
+        type: Number,
+        default: 0
+    },
+
     products:[
         {
             type:mongoose.Schema.Types.ObjectId,

@@ -6,7 +6,6 @@ import UpdatePassword from "./screen/ForgetPassword/UpdatePassword"
 import { createBrowserRouter, RouterProvider} from "react-router-dom";
 import UserData from './screen/User/UserData';
 import UserName from './screen/User/UserName';
-// import Logout from './screen/Logout/Logout';
 import Layout from './screen/NavItem/Layout';
 import UpdateProfile from './screen/User/UpdateProfile';
 import Tasks from './screen/Task/Tasks';
@@ -16,15 +15,8 @@ import HomePage from './screen/Home/HomePage';
 import Products from './screen/Products/Products';
 import Orders from './screen/Products/Orders';
 import Cart from './screen/Products/Cart';
-// import Product from './screen/Products/Product';
-// import AdminPage from './screen/Admin/AdminPage';
-
-// import AdminLayout from './screen/Admin/AdminNav/AdminLayout';
-// import AllUsers from './screen/Admin/AllUsers';
-// import AdminDetails from './screen/Admin/AdminDetails';
-// import UpdateAdmin from './screen/Admin/UpdateAdmin';
-
-
+import Mobile from './screen/Products/Mobile';
+import HeadPhone from './screen/Products/HeadPhone';
 
 
 const router = createBrowserRouter([
@@ -62,10 +54,22 @@ const router = createBrowserRouter([
         path: "updateProfile",
         element: <UpdateProfile />,
       },
+      // {
+      //   path: "/Products",
+      //   element: <Products />,
+      // },
       {
-        path: "/Products",
-        element: <Products />,
+        path: "Products",
+        element: <Mobile />,
       },
+      // {
+      //   path: "/Products/Mobile",
+      //   element: <Mobile />,
+      // },
+      // {
+      //   path: "/Products/Headphone",
+      //   element: <HeadPhone />,
+      // },
       {
         path: "/Cart",
         element: <Cart />,

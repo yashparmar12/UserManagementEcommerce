@@ -10,6 +10,8 @@ import PDFDocument from "pdfkit";
 import { parse } from "json2csv";
 import mongoose from "mongoose";
 
+
+
 export const register = async (req, res) => {
   const {
     fullname,
@@ -136,7 +138,47 @@ export const login = async (req, res) => {
   }
 };
 
-export const userData = async (req, res) => {
+export const getProductByCategory = async (req, res) => {
+  try {
+    const userId = req.id;
+    const category = req.params.category;
+
+    const userData = await userAdminModel.findById(userId);
+    if (!userData) {
+      return res.status(400).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+
+    const products = await productsModel.find({
+      category: { $regex: new RegExp(`^${category}$`, 'i') },
+    });
+
+    if (!products || products.length === 0) {
+      return res.status(404).json({
+        message: `No products found for category: ${category}`,
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Products fetched successfully",
+      user: userData,
+      userProducts: products,
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error fetching products by category:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+
+export const userData = async (req, res, io) => {
   try {
     const userId = req.id;
     let userData = await userAdminModel.findById(userId);
@@ -205,6 +247,21 @@ export const userData = async (req, res) => {
         });
       }
     }
+
+    userData.content.sort((a, b) => {
+  
+      if (a._id > b._id){
+        return -1;
+      }
+      if (a._id < b._id){ 
+        return 1;
+      }
+      return 0;
+    });
+
+
+    io.to(userId).emit('tasks', { unreadCount : userData.unreadCount});
+
     return res.status(200).json({
       message: "User data fetched successfully",
       user: userData,
@@ -482,7 +539,7 @@ export const searchData = async (req, res) => {
   }
 };
 
-export const task = async (req, res) => {
+export const task = async (req, res, io) => {
   try {
     const { ids, content } = req.body;
 
@@ -492,10 +549,21 @@ export const task = async (req, res) => {
 
     if (ids && ids.length > 0) {
       await userAdminModel.updateMany(
-        // { _id: { $in: ids } },
-        { _id: ids },
-        { $push: { content: { $each: content } } }
+       
+        { _id: { $in: ids } },
+        {
+          $push: { content: { $each: content } },
+          $inc: { unreadCount: 1 }, 
+        }
       );
+
+      // ids.forEach(id => {
+      //   console.log("first")
+      //   io.to(id).emit('tasks', { unreadCount: 1 });
+      // });
+      
+      
+
     } else {
       await userAdminModel.updateMany(
         { role: "user" },
@@ -512,6 +580,23 @@ export const task = async (req, res) => {
     console.log(error);
   }
 };
+
+export const viewTask = async (userId) => {
+  try {
+    
+    const result = await userAdminModel.updateOne(
+      {_id:userId},
+      {$set: {unreadCount: 0}}
+    );
+
+    if(!result){
+      console.log("Not able to update unReadCount");
+    }
+    console.log(`Unread count reset for user ${userId}`);
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 export const taskDuration = async (req, res) => {
   try {
@@ -807,7 +892,57 @@ export const Pagination = async (req, res) => {
   }
 };
 
-export const addProducts = async (req, res) => {
+export const addMobile = async (req, res) => {
+  try {
+    const {category, brandName, modelName,battery,price,productQuantity, ...rest} = req.body;
+    
+    let imageUpdate;
+    if (req.file) {
+      cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_SECRET_KEY,
+      });
+
+      const result = await cloudinary.uploader.upload(req.file.path);
+      imageUpdate = result.secure_url;
+    }
+
+    const productSave={
+      category,
+      brandName,
+      modelName,
+      battery,
+      price,
+      productQuantity,
+      image:imageUpdate,
+      ...rest
+    };
+
+    const insetIntoProductModel = await productsModel.insertMany([productSave]);
+    const productsObjectId = insetIntoProductModel.map(
+      (product) => product._id
+    );
+
+    const userproducts = await userAdminModel.updateMany(
+      { role: "user" },
+      { $push: { products: { $each: productsObjectId } } }
+    );
+
+    return res.status(200).json({
+      message: "User products add successfully",
+      products: userproducts,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+export const addHeadphone = async (req, res) => {
   try {
     const { brandName, modelName,ram,memory,battery,frontCamera,backCamera,simType,displaySize,price,productQuantity} = req.body;
     
@@ -1065,10 +1200,39 @@ export const deleteSpecificProductInCart = async (req, res) => {
 //     res.status(500).json({ success: false, message: error.message });
 //   }
 // }
+
+// import crypto from 'crypto';
+
+// export const verifyPayment = async (req, res) => {
+//     const { razorpayOrderId, razorpayPaymentId, razorpaySignature } = req.body;
+
+//     try {
+//         const generatedSignature = crypto
+//             .createHmac('sha256', 'YOUR_RAZORPAY_KEY_SECRET')
+//             .update(`${razorpayOrderId}|${razorpayPaymentId}`)
+//             .digest('hex');
+
+//         if (generatedSignature === razorpaySignature) {
+//             // Update Order Status in Database
+//             const order = await RazorpayModel.findOneAndUpdate(
+//                 { orderId: razorpayOrderId },
+//                 { paymentId: razorpayPaymentId, signature: razorpaySignature, status: 'paid' },
+//                 { new: true }
+//             );
+//             res.status(200).json({ success: true, order });
+//         } else {
+//             res.status(400).json({ success: false, message: 'Payment verification failed' });
+//         }
+//     } catch (error) {
+//         res.status(500).json({ success: false, message: error.message });
+//     }
+// };
+
 export const ord = async (req, res) => {
   try {
-    await userAdminModel.updateMany({}, { $set: { products: [] } });
-    // await productsModel.updateMany({});
+    // await userAdminModel.updateMany({}, { $set: { products: [] } });
+    // await userAdminModel.updateMany({}, { $set: { cart: [] } });
+    await productsModel.updateMany({});
     return res.status(200).json({
       message: "User products add successfully",
       success: true,

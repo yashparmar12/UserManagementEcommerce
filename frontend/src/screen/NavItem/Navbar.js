@@ -1,18 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-// import { Flex, Spin } from 'antd';
+import { NavLink, useNavigate } from "react-router-dom";
+
+import { jwtDecode } from 'jwt-decode';
+import {io}  from 'socket.io-client';
+
+const socket = io('http://localhost:8000', {
+
+  transports: ['websocket']
+  
+});
+
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [userinfo, setUserInfo] = useState("");
-  // const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
+
 
   const access = async (e) => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/userData", {
-      // const response = await fetch("http://localhost:8000/api/user/userData", {
+      // const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/userData", {
+      const response = await fetch("http://localhost:8000/api/user/userData", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -25,6 +35,8 @@ const Navbar = () => {
 
       if (responseData.success) {
         setUserInfo(responseData.user);
+               
+        // setCount(responseData.user.unreadCount);
         // setLoading(false);
       } else {
         console.log("Unable to fetch user data");
@@ -34,10 +46,55 @@ const Navbar = () => {
     }
   };
 
+  const getUserIdFromToken = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        return decoded.id;  
+      } catch (error) {
+        console.error('Invalid token', error);
+      }
+    }
+    return null;
+  };
+  
+  
+  const userId = getUserIdFromToken();
+
+  const handleMessageClick = async () => {
+      
+    socket.emit('viewTasks', userId);
+    setCount(0); 
+      
+  };
+
+  
+
   useEffect(() => {
-    // setLoading(true);
+
+    if (userId) {
+      socket.emit('join', userId);
+      console.log(`User ${userId} joined the room`);
+    }
+
+    socket.on('tasks', (data) => {
+      console.log(data)
+      setCount(data.unreadCount);
+    });
+
+    return () => {
+      socket.off('tasks');
+    };
+
+  }, [userId]);
+
+  
+  useEffect(() => {
     access();
   }, []);
+
+
   return (
     <div>
       {userinfo.role === "user" ? <header className="flex shadow-md py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
@@ -74,6 +131,7 @@ const Navbar = () => {
               <li className="max-lg:border-b border-gray-300 max-lg:py-3 px-3 mr-10">
                 <NavLink
                   to="/userMessages"
+                  onClick={handleMessageClick}
                   className={({ isActive }) =>
                     isActive
                       ? "text-blue-500 font-bold flex items-center gap-2 text-[15px] border-b-2 border-[#5dade2]"
@@ -94,11 +152,14 @@ const Navbar = () => {
                       />
                     </svg>
 
-                    {/* {userinfo.content.length > 0 && (
+                    {/* {userinfo.content.length > 0 && ( */}
+                    
                       <span className="bg-red-500 text-[10px] px-1.5 font-semibold min-w-[16px] h-4 flex items-center justify-center text-white rounded-full absolute -top-2 left-[60%]">
-                        {userinfo.content.length}
+                        {/* {userinfo.content.length} */}
+                        {count}
                       </span>
-                    )} */}
+                    
+                    {/* )} */}
                   </div>
                 </NavLink>
               </li>
@@ -220,39 +281,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// {userinfo.role === "user" && (
-
-//   <li className="max-lg:border-b border-gray-300 max-lg:py-3 px-3 mr-10">
-//     <NavLink
-//       to="/userMessages"
-//       className={({ isActive }) =>
-//         isActive
-//           ? "text-blue-500 font-bold flex items-center gap-2 text-[15px] border-b-2 border-[#5dade2]"
-//           : "text-gray-500 hover:text-blue-500 flex items-center gap-2 font-semibold text-[15px]"
-//       }
-//     >
-//       <span>Message</span>
-
-//       <div className="relative">
-//         <svg
-//           xmlns="http://www.w3.org/2000/svg"
-//           className="w-5 h-5 cursor-pointer"
-//           viewBox="0 0 512 512"
-//         >
-//           <path
-//             d="M438.957 19.477H73.043C32.766 19.477 0 52.244 0 92.52v246.961c0 40.276 32.766 73.043 73.043 73.043h28.663l.561 64.483a15.648 15.648 0 0 0 15.649 15.517 15.64 15.64 0 0 0 9.565-3.262l99.425-76.738h212.051c40.277 0 73.043-32.767 73.043-73.043V92.52c0-40.276-32.766-73.043-73.043-73.043zm41.739 320.005c0 23.015-18.724 41.739-41.739 41.739H221.569c-3.46 0-6.823 1.147-9.563 3.261l-78.711 60.75-.422-48.495c-.074-8.591-7.06-15.516-15.651-15.516H73.043c-23.015 0-41.739-18.724-41.739-41.739V92.52c0-23.015 18.724-41.739 41.739-41.739h365.915c23.015 0 41.739 18.724 41.739 41.739v246.962z"
-//             fill="currentColor"
-//           />
-//         </svg>
-
-//         {userinfo.content.length > 0 && (
-//           <span className="bg-red-500 text-[10px] px-1.5 font-semibold min-w-[16px] h-4 flex items-center justify-center text-white rounded-full absolute -top-2 left-[60%]">
-//             {userinfo.content.length}
-//           </span>
-//         )}
-//       </div>
-//     </NavLink>
-//   </li>
-
-// )}

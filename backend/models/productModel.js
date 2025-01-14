@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
 const product = new mongoose.Schema({
+    category: { type: String, enum: ['mobile', 'laptop', 'tv', 'tablet'] },
+   
     brandName:{
         type: String,
         // required: true
@@ -11,6 +13,9 @@ const product = new mongoose.Schema({
     image:{
         type: String
     },
+    
+
+    // ----Mobiles----
     ram:{
         type: String
     },
@@ -39,6 +44,16 @@ const product = new mongoose.Schema({
         type: Number, 
              
     },
+    warranty: {
+        type: String,     
+    },
+    processor: {
+        type: String,     
+    },
+    windows: {
+        type: String,     
+    },
+
 })
 
 export const productsModel = mongoose.model("productsModel", product);

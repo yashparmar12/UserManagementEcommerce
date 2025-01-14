@@ -15,8 +15,8 @@ const Cart = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/userData", {
-      // const response = await fetch("http://localhost:8000/api/user/userData", {
+      // const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/userData", {
+      const response = await fetch("http://localhost:8000/api/user/userData", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -26,13 +26,14 @@ const Cart = () => {
       });
 
       const responseData = await response.json();
-
+     
       if (responseData.success) {
         // console.log(responseData.cartItem[0]._id);
         
         setUserInfo(responseData.cartItem);
-        setLoading(false);
         console.log(responseData.cartItem);
+        setLoading(false);
+        console.log(responseData.cartItem.category);
       } else {
         setLoading(false);
         console.log("Unable to fetch user data");
@@ -90,8 +91,8 @@ const Cart = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/checkOut", {
-      // const response = await fetch("http://localhost:8000/api/user/checkOut", {
+      // const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/checkOut", {
+      const response = await fetch("http://localhost:8000/api/user/checkOut", {
         method: "POST",
         body: JSON.stringify({ updatedProduct }),
         headers: {
@@ -128,10 +129,9 @@ const Cart = () => {
   const deleteProduct = async(id) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`https://usermanagementecommerce-1.onrender.com/api/user/cart/${id}`, {
-      // const response = await fetch(`http://localhost:8000/api/user/cart/${id}`, {
+      // const response = await fetch(`https://usermanagementecommerce-1.onrender.com/api/user/cart/${id}`, {
+      const response = await fetch(`http://localhost:8000/api/user/cart/${id}`, {
         method: "DELETE",
-        // body: JSON.stringify({ updatedProduct }),
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -240,7 +240,8 @@ const Cart = () => {
           <div className="flex flex-col lg:flex-row gap-4 flex-grow overflow-hidden">
             <div className="lg:w-2/3 overflow-y-auto pr-4">
               {userInfo?.map((item, index) => (
-                <div
+                <div>
+               {item?.product.category === 'mobile' && <div
                   key={index}
                   className="bg-white p-4 rounded-md shadow-[0_2px_12px_-3px_rgba(6,81,237,0.3)] mb-4"
                 >
@@ -249,8 +250,6 @@ const Cart = () => {
                       <X size={20} />
                   </div>
                   </div>
-   
-
                   <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
                     <img
                       src={item?.product.image}
@@ -316,6 +315,73 @@ const Cart = () => {
                       </div>
                     </div>
                   </div>
+                </div>}
+               {item?.product.category === 'laptop' && <div
+                  key={index}
+                  className="bg-white p-4 rounded-md shadow-[0_2px_12px_-3px_rgba(6,81,237,0.3)] mb-4"
+                >
+                  <div>
+                    <div onClick={()=> deleteProduct(item.product._id)} className="cursor-pointer p-5 text-gray-400 bg-white rounded-full "  style={{ marginLeft: "95%", marginTop:"-3%", border: "none"}}>
+                      <X size={20} />
+                  </div>
+                  </div>
+                  <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+                    <img
+                      src={item?.product.image}
+                      alt={`${item?.product.brandName} ${item?.product.modelName}`}
+                      width={200}
+                      height={200}
+                      className="object-cover rounded-md"
+                    />
+                    <div className="flex-grow">
+                      <h2 className="text-lg font-bold text-gray-800">
+                        {/* {item?.product.brandName}  */}
+                        {item?.product.modelName}
+                      </h2>
+                      <p className="text-gray-600">
+                        Price: ₹{item?.product.price.toLocaleString()}
+                      </p>
+                      <div className="grid grid-cols-2 gap-2 mt-2">
+                        <p className="text-sm text-gray-600">
+                        Processor: {item?.product.processor}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                        Windows: {item?.product.windows}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Battery: {item?.product.battery}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                        Warranty: {item?.product.warranty}
+                        </p>
+                      </div>
+                      <div className="flex items-center mt-4">
+                        <button
+                          onClick={() =>
+                            handleDecreaseQuantity(item?.product._id)
+                          }
+                          className="bg-gray-300 text-gray-700 px-2 py-1 w-12"
+                          style={{ borderRadius: "20px" }}
+                        >
+                          -
+                        </button>
+                        <span className="mx-4 mt-4">{item?.quantity}</span>
+                        <button
+                          onClick={() =>
+                            handleIncreaseQuantity(item?.product._id)
+                          }
+                          className="bg-gray-300 text-gray-700 px-2 py-1 rounded-md w-12"
+                          style={{ borderRadius: "20px" }}
+                        >
+                          +
+                        </button>
+                        {unavailProduct[item.product._id] && (
+                          <p className="text-red-500 mt-5 ml-5">Out of Stock</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>}
                 </div>
               ))}
             </div>

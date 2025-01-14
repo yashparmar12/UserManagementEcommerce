@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Flex, Spin } from "antd";
+// import { io } from 'socket.io-client';
+// const socket = io('http://localhost:8000');
+
 
 const UserMessages = () => {
   const [userInfo, setUserInfo] = useState({ content: [] });
@@ -9,13 +12,15 @@ const UserMessages = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
+  // const [unreadCount, setUnreadCount] = useState(0);
+
 
   const access = async (e) => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("https://usermanagementecommerce-1.onrender.coms/api/user/userData", {
-      // const response = await fetch("http://localhost:8000/api/user/userData", {
+      // const response = await fetch("https://usermanagementecommerce-1.onrender.coms/api/user/userData", {
+      const response = await fetch("http://localhost:8000/api/user/userData", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -70,10 +75,8 @@ const UserMessages = () => {
 
       // console.log(userId)
 
-      // const response = await fetch("http://localhost:8000/api/user/taskDuration", {
-      const response = await fetch(
-        "https://usermanagementecommerce-1.onrender.com/api/user/taskDuration",
-        {
+      const response = await fetch("http://localhost:8000/api/user/taskDuration", {
+      // const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/taskDuration", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
