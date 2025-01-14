@@ -102,8 +102,8 @@ const Register = () => {
       return;
     }
 
-    // const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/register", {
-    const response = await fetch("http://localhost:8000/api/user/register", {
+    const response = await fetch("https://usermanagementecommerce-1.onrender.scom/api/user/register", {
+    // const response = await fetch("http://localhost:8000/api/user/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

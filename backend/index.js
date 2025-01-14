@@ -14,11 +14,14 @@ const app = express();
 
 dotenv.config();
 
+const __dirname = path.resolve(); 
+
 const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-      origin: 'http://localhost:3000', 
+    //   origin: 'http://localhost:3000', 
+      origin: 'https://usermanagementecommerce-1.onrender.com', 
       methods: ['GET', 'POST'],
       credentials: true,
     },
@@ -57,7 +60,8 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    // origin: "http://localhost:3000",
+    origin: "https://usermanagementecommerce-1.onrender.com",
     credentials: true, 
   })
 );
@@ -127,6 +131,10 @@ app.get("/", (req, res) => {
 
 app.use("/api/user", userRoute);
 
+app.use(express.static(path.join(__dirname, "/frontend/build")))
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+});
 
 server.listen(PORT, () => {
     db();

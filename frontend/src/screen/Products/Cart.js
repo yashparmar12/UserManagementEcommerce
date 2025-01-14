@@ -15,8 +15,8 @@ const Cart = () => {
     try {
       const token = localStorage.getItem("token");
 
-      // const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/userData", {
-      const response = await fetch("http://localhost:8000/api/user/userData", {
+      const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/userData", {
+      // const response = await fetch("http://localhost:8000/api/user/userData", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -91,8 +91,8 @@ const Cart = () => {
     try {
       const token = localStorage.getItem("token");
 
-      // const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/checkOut", {
-      const response = await fetch("http://localhost:8000/api/user/checkOut", {
+      const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/checkOut", {
+      // const response = await fetch("http://localhost:8000/api/user/checkOut", {
         method: "POST",
         body: JSON.stringify({ updatedProduct }),
         headers: {
@@ -129,8 +129,8 @@ const Cart = () => {
   const deleteProduct = async(id) => {
     try {
       const token = localStorage.getItem("token");
-      // const response = await fetch(`https://usermanagementecommerce-1.onrender.com/api/user/cart/${id}`, {
-      const response = await fetch(`http://localhost:8000/api/user/cart/${id}`, {
+      const response = await fetch(`https://usermanagementecommerce-1.onrender.com/api/user/cart/${id}`, {
+      // const response = await fetch(`http://localhost:8000/api/user/cart/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

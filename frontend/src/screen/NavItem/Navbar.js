@@ -4,7 +4,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { jwtDecode } from 'jwt-decode';
 import {io}  from 'socket.io-client';
 
-const socket = io('http://localhost:8000', {
+// const socket = io('http://localhost:8000', {
+const socket = io('https://usermanagementecommerce-1.onrender.com', {
 
   transports: ['websocket']
   
@@ -21,8 +22,8 @@ const Navbar = () => {
     try {
       const token = localStorage.getItem("token");
 
-      // const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/userData", {
-      const response = await fetch("http://localhost:8000/api/user/userData", {
+      const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/userData", {
+      // const response = await fetch("http://localhost:8000/api/user/userData", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

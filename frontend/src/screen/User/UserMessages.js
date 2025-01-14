@@ -19,8 +19,8 @@ const UserMessages = () => {
     try {
       const token = localStorage.getItem("token");
 
-      // const response = await fetch("https://usermanagementecommerce-1.onrender.coms/api/user/userData", {
-      const response = await fetch("http://localhost:8000/api/user/userData", {
+      const response = await fetch("https://usermanagementecommerce-1.onrender.coms/api/user/userData", {
+      // const response = await fetch("http://localhost:8000/api/user/userData", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -75,8 +75,8 @@ const UserMessages = () => {
 
       // console.log(userId)
 
-      const response = await fetch("http://localhost:8000/api/user/taskDuration", {
-      // const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/taskDuration", {
+      // const response = await fetch("http://localhost:8000/api/user/taskDuration", {
+      const response = await fetch("https://usermanagementecommerce-1.onrender.com/api/user/taskDuration", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
