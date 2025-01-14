@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
     
 });
 
-const PORT = 8000 || 4000; 
+const PORT = 4000 || 8000; 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
